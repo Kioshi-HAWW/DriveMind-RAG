@@ -15,15 +15,15 @@ from qdrant_client.models import (
 )
 
 from app.core.config import settings
-from app.services.embedding_service import embed_text
+from app.services.embedding_service import embed_query
 
 logger = logging.getLogger(__name__)
 
 # Singleton Qdrant client
 _client: QdrantClient | None = None
 
-# Dimension for all-MiniLM-L6-v2
-VECTOR_SIZE = 384
+# Dimension for Gemini text-embedding-004
+VECTOR_SIZE = 768
 
 
 def get_client() -> QdrantClient:
@@ -97,7 +97,7 @@ def search(query: str, top_k: int | None = None) -> List[Dict[str, Any]]:
     """
     k = top_k or settings.retrieval_top_k
     client = get_client()
-    query_vector = embed_text(query)
+    query_vector = embed_query(query)
 
     hits = client.search(
         collection_name=settings.qdrant_collection_name,
