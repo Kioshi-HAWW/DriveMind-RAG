@@ -47,13 +47,28 @@ def embed_query(text: str) -> List[float]:
 def embed_chunks(chunks: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """
     Add an 'embedding' key to each chunk dict.
-    Embeds one chunk at a time to stay within Gemini free-tier rate limits.
+    Batches the texts into a single API call to avoid 15 RPM Gemini rate limits.
     Returns the same list with embeddings attached.
     """
+    if not chunks:
+        return []
+
     _configure_genai()
+    texts = [chunk["text"] for chunk in chunks]
+    
+    # Send the list of strings to embed_content directly
+    batch_result = genai.embed_content(
+        model=_EMBED_MODEL,
+        content=texts,
+        task_type="retrieval_document",
+    )
+    
+    embeddings = batch_result["embedding"]
+    
     result = []
-    for chunk in chunks:
+    for chunk, emb in zip(chunks, embeddings):
         enriched = dict(chunk)
-        enriched["embedding"] = embed_text(chunk["text"])
+        enriched["embedding"] = emb
         result.append(enriched)
+        
     return result
