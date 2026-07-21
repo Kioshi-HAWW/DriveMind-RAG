@@ -52,7 +52,7 @@ Update `memory.md` after every phase (or sub-step) is completed.
 - [x] Set all env vars in Render dashboard (GEMINI_API_KEY, QDRANT_API_KEY, QDRANT_URL, GOOGLE_SERVICE_ACCOUNT_B64, GOOGLE_DRIVE_FOLDER_ID)
 - [x] Deploy succeeded — service live at https://drivemind-rag-1.onrender.com
 - [x] `/health` returns `{"status":"ok"}` ✅
-- [ ] Run `/ingest` in production, then test `/chat`
+- [x] Run `/ingest` in production, then test `/chat` (Validated asynchronous execution, batched embeddings, and zero OOM issues)
 
 ## Phase 7 — Polish (post-MVP)
 - [ ] Simple chat UI (optional) or Postman collection for now

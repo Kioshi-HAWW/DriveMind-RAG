@@ -4,7 +4,7 @@
 A Retrieval-Augmented Generation (RAG) system that lets a user ask questions
 in natural language and get answers grounded in their **own document
 library** (books, notes, PDFs, docs stored in Google Drive). The system
-retrieves relevant chunks from a vector store and uses an AI agent (Claude)
+retrieves relevant chunks from a vector store and uses an AI agent (Gemini)
 to synthesize a grounded, cited answer — not a hallucinated one.
 
 Hosted on **Render** as a web service (API + optional simple chat UI).
@@ -28,10 +28,10 @@ that:
 2. **Ingestion pipeline** — extract text → chunk → embed → upsert into
    vector store, with metadata (source file, page, drive link).
 3. **Vector store** — persistent, queryable by similarity + metadata filter.
-4. **RAG Agent** — Claude-based agent with a `search_library` tool that:
+4. **RAG Agent** — Gemini-based agent with a `search_library` tool that:
    - Takes a query
    - Retrieves top-k chunks from the vector store
-   - Returns them to Claude to compose a cited answer
+   - Returns them to Gemini to compose a cited answer
 5. **Chat API endpoint** — `POST /chat` takes a user question, runs the
    agent loop, returns answer + sources.
 6. **Re-ingestion** — ability to re-sync when files are added/changed in

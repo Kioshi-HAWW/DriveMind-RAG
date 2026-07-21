@@ -15,9 +15,9 @@
 | Source docs       | **Google Drive API**                      | User's library lives there; free |
 | Parsing           | `pypdf`, `python-docx`, Drive export for Gdocs | Cover pdf/docx/gdoc/txt |
 | Chunking          | LangChain `RecursiveCharacterTextSplitter`| Battle-tested, simple, free (local lib) |
-| Embeddings        | **Local `sentence-transformers` model** (`all-MiniLM-L6-v2`) | Runs inside the app process, zero API cost, no rate limit — avoids any paid embedding API entirely |
+| Embeddings        | **Gemini API — free tier** (`models/gemini-embedding-001`) | Replaced local models to avoid 512MB RAM OOM limits on Render free tier. Free daily quota. |
 | Vector store      | **Qdrant Cloud — Free Forever tier** (1GB) | Persistent, hosted, no credit card required — avoids Render's ephemeral disk problem |
-| Agent / chat model| **Google Gemini API — free tier** (e.g. `gemini-2.0-flash` or current free-tier model) | Genuinely free daily quota, supports function/tool calling needed for the agent |
+| Agent / chat model| **Google Gemini API — free tier** (e.g. `gemini-3.5-flash` or current free-tier model) | Genuinely free daily quota, supports function/tool calling needed for the agent |
 | Agent framework   | Hand-rolled tool-use loop via `google-generativeai` SDK | Keep it simple, no heavy framework |
 | Hosting           | **Render Free Web Service**               | $0, per requirement — see limitations below |
 | Secrets           | Render Environment Variables              | API keys never in repo |
@@ -32,10 +32,8 @@
   (you hit it yourself, or trigger it from your machine/phone when you
   add new files to Drive).
 - **Gemini free tier has request-per-minute / per-day limits.** Fine for
-  single-user personal use; just don't hammer it in a loop.
-- **Local embedding model adds a bit of RAM/startup time** to the Render
-  free instance (which has limited RAM) — `all-MiniLM-L6-v2` is small
-  (~80MB) and chosen specifically because it fits comfortably.
+  single-user personal use, but we batch our chunk embedding requests
+  to stay within the 15 RPM limit.
 - **Qdrant free tier caps at 1GB** — more than enough for a personal text
   library (a 1GB collection is roughly hundreds of thousands of chunks).
 
@@ -49,7 +47,7 @@
 [Google Drive Folder]
         │  (list + download files)
         ▼
-[Ingestion Pipeline]  ── extract text ── chunk ── embed (local model) ──► [Qdrant Vector Store]
+[Ingestion Pipeline]  ── extract text ── chunk ── embed (Gemini API) ──► [Qdrant Vector Store]
                                                                                  ▲
                                                                                  │ search_library tool
 [User] ──question──► [/chat API] ──► [Gemini Agent Loop] ─────────────────────┘
@@ -62,7 +60,7 @@
 1. User sends question → `/chat`.
 2. Gemini receives the question + `search_library` function/tool definition.
 3. Gemini decides to call `search_library(query, top_k)`.
-4. Backend embeds the query with the local `sentence-transformers` model,
+4. Backend embeds the query using Gemini Embedding API (`gemini-embedding-001`),
    searches Qdrant, returns chunks + metadata (source file name, drive
    link, chunk text) as the function result.
 5. Gemini reads the result, composes final answer citing sources.
@@ -85,7 +83,7 @@ project-root/
 │   ├── services/
 │   │   ├── drive_service.py       # list/download from Google Drive
 │   │   ├── chunking_service.py    # text splitting
-│   │   ├── embedding_service.py   # OpenAI embeddings
+│   │   ├── embedding_service.py   # Gemini Embeddings API
 │   │   ├── vectorstore_service.py # Qdrant client wrapper
 │   │   └── agent_service.py       # Claude agent loop + tool defs
 │   ├── tools/

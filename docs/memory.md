@@ -14,14 +14,12 @@
 ---
 
 ## Current Position
-- **Phase:** Phase 6 — Deploy to Render ✅ COMPLETE
-- **Currently working file:** N/A
+- **Phase:** Phase 7 — Polish (post-MVP)
+- **Currently working file:** docs/
 - **Last updated:** 2026-07-21
-- **Last action taken:** Deployed Docker-based service to Render. `/health` returns `{"status":"ok"}`. Service live at https://drivemind-rag-1.onrender.com
+- **Last action taken:** Completed Phase 6 and fixed all 502/429 issues on Render deployment. Endpoints are asynchronous, embeddings batched, and Qdrant size updated to 3072.
 
 ## Next Step
-- Run `POST /ingest` against the production URL to index Google Drive documents.
-- Test `POST /chat` with a real query in production.
 - (Optional Phase 7) Add UI, scheduled re-ingestion, rate limiting, basic auth.
 
 ## Decisions Locked In (do not re-litigate without user request)
@@ -29,8 +27,8 @@
 - **Budget: $0.** No paid API keys or paid plans anywhere in the stack.
 - Vector store: **Qdrant Cloud free-forever tier** (NOT local Chroma —
   Render's free disk is ephemeral)
-- Embeddings: **Local `sentence-transformers` (`all-MiniLM-L6-v2`)** —
-  runs in-process, no API cost, no rate limit
+- Embeddings: **Gemini Embeddings API (`models/gemini-embedding-001`)** —
+  Free tier, zero server RAM cost, replacing previous local model due to OOM on 512MB RAM free instances.
 - Chat/agent model: **Google Gemini API free tier**, hand-rolled tool-use
   loop via `google-generativeai` SDK (no LangChain agent framework)
 - Drive auth: Google Service Account (not OAuth user flow) — free
@@ -55,7 +53,7 @@
 | 2026-07-19 | Phase -1 (planning) | Reworked stack to be fully free-tier (Gemini + local embeddings + Qdrant free + Render free); clarified ChatGPT Go has no API access |
 | 2026-07-19 | Phase 0 (Setup) | Initialized repository, resolved gRPC dependency pin, configured local sentence-transformers embedding check, and verified passing tests. |
 | 2026-07-21 | Phase 1 - 4 | Fixed Qdrant WriteTimeout with 60s timeout & 50-point batches. Successfully ingested Google Drive PDF (620 chunks). Verified end-to-end RAG tool search & Gemini generation with source citations. 8/8 unit tests passing. |
-| 2026-07-21 | Phase 6 | Deployed to Render using Docker runtime. Fixed `grpcio` build (added gcc/build-essential). Fixed `$PORT` expansion via shell CMD. Added QDRANT_URL and GOOGLE_DRIVE_FOLDER_ID env vars. Service live at https://drivemind-rag-1.onrender.com — `/health` returns `{"status":"ok"}`. |
+| 2026-07-21 | Phase 6 | Fixed Render 502 issues: replaced local `sentence-transformers` with Gemini Embedding API to fix OOM crash, added hardcoded port binding, set FastAPI routes to sync `def` to avoid event-loop blocking, and batched embedding requests to stay under 15 RPM limits. Verified production endpoints are stable. |
 
 
 ---

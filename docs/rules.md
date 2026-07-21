@@ -6,8 +6,8 @@
 - **httpx** for outbound HTTP calls (not `requests`, for async support)
 - **google-generativeai** official SDK for the Gemini agent/chat model
   (free tier)
-- **sentence-transformers** (`all-MiniLM-L6-v2`) for **local, free**
-  embeddings — do not call a paid embedding API
+- **Gemini Embeddings API** (`models/gemini-embedding-001`) for **free**
+  embeddings (batched to respect 15 RPM limits) — replaced local models to prevent 512MB RAM OOMs on Render.
 - **qdrant-client** for vector store (free cloud cluster)
 - **google-api-python-client** + `google-auth` for Drive access
 - **langchain-text-splitters** (lightweight, just for chunking — do NOT
