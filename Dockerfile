@@ -14,8 +14,9 @@ COPY . /app
 # Install python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose the port Render provides
-EXPOSE $PORT
+# Render injects PORT at runtime; 10000 is Render's default for Docker services
+ENV PORT=10000
+EXPOSE 10000
 
-# Run the app using env variable $PORT
-CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port $PORT"]
+# Use shell form so $PORT is expanded at container start
+CMD uvicorn app.main:app --host 0.0.0.0 --port $PORT
