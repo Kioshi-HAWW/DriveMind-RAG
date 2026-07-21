@@ -4,6 +4,18 @@
 
 ---
 
+## 🖥️ Application UI Screenshots
+
+<!-- Screenshot 1 Placeholder: Main Chat Interface -->
+![DriveMind RAG Streamlit Chat Interface](docs/assets/streamlit_chat_ui.png)
+
+<br/>
+
+<!-- Screenshot 2 Placeholder: Source Citations & Sidebar Ingestion -->
+![DriveMind RAG Source Citations and Ingestion](docs/assets/streamlit_sources_ui.png)
+
+---
+
 ## 🌟 Why DriveMind RAG? (Novelty & Efficiency)
 
 Building RAG applications often incurs expensive server costs, heavy memory footprints, and complex agent frameworks. **DriveMind RAG** was engineered from the ground up to solve these exact problems:
