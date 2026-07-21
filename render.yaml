@@ -9,6 +9,8 @@ services:
         sync: false
       - key: QDRANT_API_KEY
         sync: false
+      - key: QDRANT_URL                # <-- add this
+        sync: false
       - key: GEMINI_API_KEY
         sync: false
     healthCheckPath: /health
