@@ -42,7 +42,7 @@ def _init_model() -> genai.GenerativeModel:
 
 # ── Public interface ──────────────────────────────────────────────────────────
 
-async def answer(question: str) -> Dict[str, Any]:
+def answer(question: str) -> Dict[str, Any]:
     """
     Run the Gemini tool-use loop for `question`.
     Returns {"answer": str, "sources": list[SourceChunk-like dicts]}.

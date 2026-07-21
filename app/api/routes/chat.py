@@ -12,13 +12,13 @@ router = APIRouter()
 
 
 @router.post("/chat", response_model=ChatResponse, tags=["chat"])
-async def chat(request: ChatRequest):
+def chat(request: ChatRequest):
     """
     Run the RAG agent loop for a user question.
     Returns a grounded answer with source citations.
     """
     try:
-        result = await agent_service.answer(request.message)
+        result = agent_service.answer(request.message)
         return ChatResponse(answer=result["answer"], sources=result["sources"])
     except Exception as exc:
         logger.exception("Error in /chat: %s", exc)

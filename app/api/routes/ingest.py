@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
-async def _run_ingestion():
+def _run_ingestion():
     """Full ingestion pipeline: Drive → chunk → embed → upsert."""
     logger.info("Ingestion started.")
     files = drive_service.list_files()
