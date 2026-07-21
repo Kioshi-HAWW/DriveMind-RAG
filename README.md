@@ -1,4 +1,4 @@
-# Personal Library RAG Assistant
+# DriveMind(Personal Library RAG Assistant)
 
 A Retrieval-Augmented Generation (RAG) system that answers questions from your personal
 Google Drive document library using **100% free-tier services**.
