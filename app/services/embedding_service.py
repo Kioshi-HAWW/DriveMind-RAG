@@ -13,8 +13,8 @@ from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 
-_EMBED_MODEL = "models/text-embedding-004"
-_VECTOR_DIM = 768  # Gemini text-embedding-004 output dimension
+_EMBED_MODEL = "models/gemini-embedding-001"
+_VECTOR_DIM = 3072  # gemini-embedding-001 output dimension
 
 
 def _configure_genai() -> None:

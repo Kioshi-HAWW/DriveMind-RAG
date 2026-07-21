@@ -22,8 +22,8 @@ logger = logging.getLogger(__name__)
 # Singleton Qdrant client
 _client: QdrantClient | None = None
 
-# Dimension for Gemini text-embedding-004
-VECTOR_SIZE = 768
+# Dimension for Gemini gemini-embedding-001
+VECTOR_SIZE = 3072
 
 
 def get_client() -> QdrantClient:
