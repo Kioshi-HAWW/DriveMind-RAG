@@ -104,7 +104,7 @@ st.sidebar.subheader("Library Ingestion")
 st.sidebar.caption("Sync and index latest documents from Google Drive")
 
 if st.sidebar.button("⚡ Sync Google Drive"):
-    with st.sidebar.spinner("Triggering background sync..."):
+    with st.spinner("Triggering background sync..."):
         try:
             res = requests.post(f"{api_url}/ingest", json={}, timeout=10)
             if res.status_code == 200:
