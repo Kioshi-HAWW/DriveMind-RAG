@@ -14,15 +14,15 @@
 ---
 
 ## Current Position
-- **Phase:** Phase 6 — Deploy to Render (IN PROGRESS)
-- **Currently working file:** render.yaml
+- **Phase:** Phase 6 — Deploy to Render ✅ COMPLETE
+- **Currently working file:** N/A
 - **Last updated:** 2026-07-21
-- **Last action taken:** Created `render.yaml` for Render deployment configuration.
+- **Last action taken:** Deployed Docker-based service to Render. `/health` returns `{"status":"ok"}`. Service live at https://drivemind-rag-1.onrender.com
 
 ## Next Step
-- Set all required environment variables in the Render dashboard (GOOGLE_SERVICE_ACCOUNT_B64, QDRANT_API_KEY, GEMINI_API_KEY).
-- Deploy the service on Render and verify `/health` endpoint.
-- Test `/ingest` and `/chat` endpoints in the deployed environment.
+- Run `POST /ingest` against the production URL to index Google Drive documents.
+- Test `POST /chat` with a real query in production.
+- (Optional Phase 7) Add UI, scheduled re-ingestion, rate limiting, basic auth.
 
 ## Decisions Locked In (do not re-litigate without user request)
 - Backend: FastAPI (Python)
@@ -55,6 +55,7 @@
 | 2026-07-19 | Phase -1 (planning) | Reworked stack to be fully free-tier (Gemini + local embeddings + Qdrant free + Render free); clarified ChatGPT Go has no API access |
 | 2026-07-19 | Phase 0 (Setup) | Initialized repository, resolved gRPC dependency pin, configured local sentence-transformers embedding check, and verified passing tests. |
 | 2026-07-21 | Phase 1 - 4 | Fixed Qdrant WriteTimeout with 60s timeout & 50-point batches. Successfully ingested Google Drive PDF (620 chunks). Verified end-to-end RAG tool search & Gemini generation with source citations. 8/8 unit tests passing. |
+| 2026-07-21 | Phase 6 | Deployed to Render using Docker runtime. Fixed `grpcio` build (added gcc/build-essential). Fixed `$PORT` expansion via shell CMD. Added QDRANT_URL and GOOGLE_DRIVE_FOLDER_ID env vars. Service live at https://drivemind-rag-1.onrender.com — `/health` returns `{"status":"ok"}`. |
 
 
 ---

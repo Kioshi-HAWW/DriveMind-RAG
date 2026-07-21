@@ -47,10 +47,11 @@ Update `memory.md` after every phase (or sub-step) is completed.
 - [x] `GET /health`
 - [x] Test via FastAPI TestClient (12/12 tests passing)
 
-## Phase 6 — Deploy to Render
-- [ ] `render.yaml` + start/build commands (created)
-- [ ] Set all env vars in Render dashboard
-- [ ] Deploy, confirm `/health` responds
+## Phase 6 — Deploy to Render ✅
+- [x] `render.yaml` + Dockerfile with Docker runtime (created)
+- [x] Set all env vars in Render dashboard (GEMINI_API_KEY, QDRANT_API_KEY, QDRANT_URL, GOOGLE_SERVICE_ACCOUNT_B64, GOOGLE_DRIVE_FOLDER_ID)
+- [x] Deploy succeeded — service live at https://drivemind-rag-1.onrender.com
+- [x] `/health` returns `{"status":"ok"}` ✅
 - [ ] Run `/ingest` in production, then test `/chat`
 
 ## Phase 7 — Polish (post-MVP)
