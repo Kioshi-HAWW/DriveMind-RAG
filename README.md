@@ -7,9 +7,10 @@ Google Drive document library using **100% free-tier services**.
 | Layer | Technology |
 |---|---|
 | Backend | FastAPI (Python) |
-| Embeddings | `sentence-transformers` — `all-MiniLM-L6-v2` (local, no API) |
+| Embeddings | Gemini Embeddings API (`models/gemini-embedding-001`) |
 | Vector Store | Qdrant Cloud — Free Forever tier |
-| LLM / Agent | Google Gemini API — free tier |
+| LLM / Agent | Google Gemini API — free tier (`gemini-3.5-flash`) |
+| Frontend | Streamlit Web UI |
 | Drive Auth | Google Service Account |
 | Hosting | Render Free Web Service |
 
@@ -31,8 +32,8 @@ cp .env.example .env
 # 4. Run the API
 uvicorn app.main:app --reload
 
-# 5. Trigger ingestion (separate terminal)
-python scripts/ingest_drive.py
+# 5. Launch the Streamlit Chat UI (in a new terminal)
+streamlit run streamlit_app.py
 ```
 
 ## API Endpoints
