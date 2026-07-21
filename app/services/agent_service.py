@@ -47,11 +47,24 @@ def answer(question: str) -> Dict[str, Any]:
     Run the Gemini tool-use loop for `question`.
     Returns {"answer": str, "sources": list[SourceChunk-like dicts]}.
     """
-    model = _init_model()
-    chat = model.start_chat(enable_automatic_function_calling=False)
+    try:
+        model = _init_model()
+        chat = model.start_chat(enable_automatic_function_calling=False)
 
-    # Step 1: Send user question
-    response = chat.send_message(question)
+        # Step 1: Send user question
+        response = chat.send_message(question)
+    except Exception as exc:
+        logger.exception("Gemini API error during initial chat message: %s", exc)
+        err_str = str(exc)
+        if "429" in err_str or "quota" in err_str.lower() or "ResourceExhausted" in err_str:
+            return {
+                "answer": "⚠️ The Gemini API rate limit or daily quota has been reached. Please wait a minute before sending another question.",
+                "sources": [],
+            }
+        return {
+            "answer": f"⚠️ Gemini API connection error: {err_str}",
+            "sources": [],
+        }
 
     collected_sources: List[Dict] = []
 

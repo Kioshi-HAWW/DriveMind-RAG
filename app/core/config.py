@@ -17,7 +17,7 @@ class Settings(BaseSettings):
 
     # ── Gemini (chat / agent model) ─────────────────────────────────────────
     gemini_api_key: str
-    gemini_model: str = "gemini-3.5-flash"
+    gemini_model: str = "gemini-1.5-flash"
 
     # ── Qdrant Cloud (vector store) ──────────────────────────────────────────
     qdrant_url: str          # e.g. https://xxx.us-east4-0.gcp.cloud.qdrant.io
