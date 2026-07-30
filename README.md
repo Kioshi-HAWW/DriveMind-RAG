@@ -57,6 +57,7 @@ Building RAG applications often incurs expensive server costs, heavy memory foot
 - [x] **Phase 5 — Production API Layer**: FastAPI web server providing `/health`, `/ingest`, and `/chat` endpoints.
 - [x] **Phase 6 — Docker & Render Deployment**: Containerized deployment on Render with hardcoded port bindings and asynchronous threadpool request handling.
 - [x] **Phase 7 — Streamlit Chat UI**: Dark-themed interactive web interface with source citation pills, sidebar health checks, and one-click Drive synchronization.
+- [x] **Phase 8 — Vercel Next.js Frontend**: Modern Next.js 14 frontend web app built for Vercel deployment, featuring live backend health checking, interactive citation modals, and Drive sync trigger.
 
 ---
 

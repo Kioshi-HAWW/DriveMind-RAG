@@ -5,6 +5,7 @@ Starts logging, creates the Qdrant collection on startup, and mounts all routes.
 import logging
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
 from app.core.logging import setup_logging
@@ -36,9 +37,18 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# ── Enable CORS for Vercel & local frontends ──────────────────────────────────
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # ── Mount routers ─────────────────────────────────────────────────────────────
 app.include_router(health.router)
 app.include_router(chat.router)
 app.include_router(ingest.router)
 
-logger.info("Routes registered: /health, /chat, /ingest")
+logger.info("Routes registered: /health, /chat, /ingest (CORS enabled)")
