@@ -46,6 +46,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/", tags=["root"])
+async def root():
+    """Root endpoint for direct browser visits."""
+    return {
+        "message": "Welcome to DriveMind RAG API!",
+        "docs_url": "/docs",
+        "health_check": "/health"
+    }
+
+
 # ── Mount routers ─────────────────────────────────────────────────────────────
 app.include_router(health.router)
 app.include_router(chat.router)
