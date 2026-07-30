@@ -4,6 +4,7 @@ Switched from local sentence-transformers to Gemini API to avoid OOM on
 Render free tier (512 MB RAM). Gemini embeddings are free-tier-compatible
 and produce 768-dim vectors.
 """
+import time
 import logging
 from typing import List, Dict, Any
 
@@ -47,7 +48,7 @@ def embed_query(text: str) -> List[float]:
 def embed_chunks(chunks: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """
     Add an 'embedding' key to each chunk dict.
-    Batches the texts into a single API call to avoid 15 RPM Gemini rate limits.
+    Batches the texts into smaller API calls to avoid Gemini 100 quota/rate limits.
     Returns the same list with embeddings attached.
     """
     if not chunks:
@@ -56,19 +57,47 @@ def embed_chunks(chunks: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     _configure_genai()
     texts = [chunk["text"] for chunk in chunks]
     
-    # Send the list of strings to embed_content directly
-    batch_result = genai.embed_content(
-        model=_EMBED_MODEL,
-        content=texts,
-        task_type="retrieval_document",
-    )
+    BATCH_SIZE = 50
+    all_embeddings = []
     
-    embeddings = batch_result["embedding"]
+    for i in range(0, len(texts), BATCH_SIZE):
+        batch_texts = texts[i : i + BATCH_SIZE]
+        retries = 4
+        while retries > 0:
+            try:
+                batch_result = genai.embed_content(
+                    model=_EMBED_MODEL,
+                    content=batch_texts,
+                    task_type="retrieval_document",
+                )
+                
+                embs = batch_result["embedding"]
+                # If content is a list, embedding is a list of lists.
+                if len(batch_texts) == 1 and isinstance(embs, list) and not isinstance(embs[0], list):
+                    all_embeddings.append(embs)
+                else:
+                    all_embeddings.extend(embs)
+                
+                break  # success, exit retry loop
+            except Exception as e:
+                retries -= 1
+                if "429" in str(e) or "Quota" in str(e) or "exhausted" in str(e).lower():
+                    logger.warning("Gemini rate limit hit during embedding. Sleeping 10s... (retries left: %d) Error: %s", retries, str(e))
+                    time.sleep(10)
+                    if retries == 0:
+                        raise
+                else:
+                    raise e
+                    
+        # Small delay between batches to respect RPM
+        if i + BATCH_SIZE < len(texts):
+            time.sleep(2)
     
     result = []
-    for chunk, emb in zip(chunks, embeddings):
+    for chunk, emb in zip(chunks, all_embeddings):
         enriched = dict(chunk)
         enriched["embedding"] = emb
         result.append(enriched)
         
     return result
+
