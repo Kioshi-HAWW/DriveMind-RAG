@@ -2,6 +2,10 @@
 
 > **A 100% Free-Tier ($0/mo), Production-Ready Retrieval-Augmented Generation (RAG) System** that turns your Google Drive books, papers, and notes into an interactive, grounded AI knowledge base.
 
+### 🌐 Live Deployments
+- **Frontend (Vercel)**: [https://drive-mind-rag.vercel.app/](https://drive-mind-rag.vercel.app/)
+- **Backend API (Render)**: [https://drivemind-rag-1.onrender.com/](https://drivemind-rag-1.onrender.com/)
+
 ---
 
 ## 🖥️ Application UI Screenshots
